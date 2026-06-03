@@ -6,9 +6,14 @@ import { useAuth } from '../hooks/useAuth.js';
 // Socket singleton — chỉ tạo 1 lần toàn app
 let socketInstance = null;
 
+const getSocketUrl = () => {
+  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  return apiUrl.replace(/\/api\/?$/, '');
+};
+
 export const getSocket = (token) => {
   if (!socketInstance || !socketInstance.connected) {
-    socketInstance = io(import.meta.env.VITE_API_URL.replace('/api', ''), {
+    socketInstance = io(getSocketUrl(), {
       auth: { token },
       reconnection: true,
       reconnectionDelay: 1000,
